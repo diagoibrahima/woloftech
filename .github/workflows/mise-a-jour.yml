@@ -1,0 +1,55 @@
+# Vérifie chaque jour s'il y a un nouvel épisode et republie le site.
+# Se relance aussi à la main (onglet Actions, "Run workflow") et à chaque modification du site.
+name: Mise a jour du site
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: site
+  cancel-in-progress: false
+
+jobs:
+  publier:
+    # Windows : le script utilise Windows PowerShell et System.Drawing pour les visuels.
+    runs-on: windows-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lire le flux RSS et la chaine YouTube
+        shell: powershell
+        run: .\tools\update-episodes.ps1
+
+      - name: Enregistrer les nouveaux episodes
+        shell: powershell
+        run: |
+          git add data assets/episodes
+          git diff --cached --quiet
+          if ($LASTEXITCODE -ne 0) {
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'Mise a jour automatique des episodes'
+            git push
+          }
+          exit 0
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deploiement
+        uses: actions/deploy-pages@v4
