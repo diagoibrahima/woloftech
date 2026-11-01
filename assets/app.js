@@ -151,7 +151,7 @@
       if (!b || !b.dataset.watch) return;
       Player.pause();
       dlg.classList.toggle('tall', b.dataset.tall === '1');
-      frame.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(b.dataset.watch) + '?autoplay=1&rel=0" title="' + esc(b.dataset.title) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+      frame.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(b.dataset.watch) + '?autoplay=1&rel=0" title="' + esc(b.dataset.title) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
       dlg.showModal();
     });
   }
@@ -280,7 +280,7 @@
       bar.hidden = true;
       bar.setAttribute('aria-label', 'Lecteur audio');
       bar.innerHTML = '<input class="range" type="range" min="0" max="1000" value="0" aria-label="Position dans l\'épisode">' +
-        '<div class="wrap"><img src="" alt="" width="54" height="54">' +
+        '<div class="wrap"><img alt="" width="54" height="54">' +
         '<div class="what"><a href="#"></a><span class="sub"></span></div>' +
         '<button class="ctl skip15" type="button" data-skip="-15" aria-label="Reculer de 15 secondes">−15 s</button>' +
         '<button class="play-big" type="button" data-bar-toggle aria-label="Lecture">' + ICONS.play + '</button>' +
@@ -610,6 +610,7 @@
         f.title = box.dataset.title;
         f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
         f.allowFullscreen = true;
+        f.referrerPolicy = 'strict-origin-when-cross-origin';
         box.innerHTML = '';
         box.appendChild(f);
       });
