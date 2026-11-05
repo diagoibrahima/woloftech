@@ -1,6 +1,22 @@
 // Fichier genere par tools/update-episodes.ps1 - ne pas modifier a la main.
 window.WT_EPISODES = [
     {
+        "id":  "S15E6",
+        "season":  15,
+        "episode":  6,
+        "part":  0,
+        "kind":  "episode",
+        "title":  "Cybersécurité au Sénégal : au-delà de la technologie, construire la confiance numérique",
+        "date":  "2026-11-03",
+        "duration":  "01:15:46",
+        "summary":  "Ces derniers mois, le Sénégal fait face à une vague de cyberattaques sans précédent touchant ses institutions les plus stratégiques. Entre fuites de données, ransomwares…",
+        "description":  "Ces derniers mois, le Sénégal fait face à une vague de cyberattaques sans précédent touchant ses institutions les plus stratégiques. Entre fuites de données, ransomwares ciblant le Trésor public ou les fichiers d\u0027identité biométriques, et l\u0027accélération de la digitalisation via le New Deal Technologique, la question de la cyber-souveraineté et de l\u0027urgence nationale n\u0027a jamais été aussi cruciale. Invité : Moustapha DIAGO 👉LinkedIn 👉Face book 👉Site web Host : El Ibrahima DIAGO👉LinkedIn 👉Facebook👉Tiktok 👉Instagram 👉Twitter",
+        "audio":  "https://anchor.fm/s/2d912044/podcast/play/128725432/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-10-3%2F8a6b1fa9-3b2e-9aef-a0e2-3fab59d51bd9.mp3",
+        "spotify":  "https://creators.spotify.com/pod/show/woloftech/episodes/Cyberscurit-au-Sngal--au-del-de-la-technologie--construire-la-confiance-numrique-e3rmsvo",
+        "video":  "eMj1ESZQ-wA",
+        "image":  "assets/episodes/s15e6.jpg"
+    },
+    {
         "id":  "S15E5",
         "season":  15,
         "episode":  5,
