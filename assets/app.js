@@ -629,6 +629,7 @@
       '<form class="banga-form"><input type="text" name="q" maxlength="200" autocomplete="off" aria-label="Votre question" placeholder="' + IDLE + '">' +
       '<button class="banga-mic" type="button" aria-pressed="false" aria-label="Parler à Banga" title="Parler à Banga" hidden>' + mic + '</button>' +
       '<button class="banga-send" type="submit" aria-label="Envoyer" title="Envoyer">' + send + '</button></form>' +
+      '<p class="banga-note" hidden>À l\'oral, votre voix passe par le service vocal de votre navigateur. Banga comprend le français.</p>' +
       '</section>';
     document.body.appendChild(root);
     var opener = root.querySelector('.banga-open'), panel = root.querySelector('.banga-panel'), log = root.querySelector('.banga-log');
@@ -760,6 +761,7 @@
     var Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) return;
     micBtn.hidden = false;
+    root.querySelector('.banga-note').hidden = false;
     function setListening(on) {
       micBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
       input.placeholder = on ? 'Je vous écoute…' : IDLE;
