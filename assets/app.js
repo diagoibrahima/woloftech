@@ -948,7 +948,7 @@
       '<a class="skip" href="#main">Aller au contenu</a>' +
       '<header class="site-head"><div class="wrap">' +
       // Sur l'accueil, le mot WolofTech laisse la place au logo dès que la page défile.
-      '<a class="brand' + (page === 'accueil' ? ' brand-home' : '') + '" href="index.html" aria-label="Podcast Wolof Tech, accueil"><span class="brand-word" aria-hidden="true">WolofTech</span><img src="assets/logo.png" alt="" width="500" height="500"></a>' +
+      '<a class="brand' + (page === 'accueil' ? ' brand-home' : '') + '" href="index.html" aria-label="Podcast Wolof Tech, accueil"><span class="brand-word" aria-hidden="true">WOLOF TECH</span><img src="assets/logo.png" alt="" width="500" height="500"></a>' +
       '<button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>' +
       '<nav class="nav" id="site-nav" aria-label="Navigation principale">' + links.map(function (l) {
         return '<a href="' + l[1] + '"' + (page === l[0] ? ' aria-current="page"' : '') + '>' + l[2] + '</a>';

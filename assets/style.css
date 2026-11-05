@@ -56,7 +56,7 @@ a.tag:hover { background: var(--white); }
 .brand img { width: var(--logo); }
 .brand-word { display: none; }
 .brand-home { width: auto; }
-.brand-home .brand-word { display: block; font: 800 clamp(1.4rem, 2.4vw, 1.75rem)/1 var(--head); letter-spacing: -0.03em; }
+.brand-home .brand-word { display: block; font: 700 1.02rem/1 var(--head); white-space: nowrap; }
 .brand-home img { visibility: hidden; opacity: 0; }
 .site-head.scrolled .brand-home img { visibility: visible; opacity: 1; }
 .site-head.scrolled .brand-home .brand-word { visibility: hidden; opacity: 0; }
