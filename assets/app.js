@@ -811,6 +811,7 @@
 
   /* ---------- Services ---------- */
   function renderServices() {
+    var A = SITE.animateur;
     var contacts = [];
     if (CONTACT.telephone) contacts.push(['tel:' + CONTACT.telephone.replace(/[^\d+]/g, ''), 'Téléphone', CONTACT.telephone]);
     if (CONTACT.whatsapp) contacts.push(['https://wa.me/' + CONTACT.whatsapp.replace(/\D/g, ''), 'WhatsApp', CONTACT.whatsapp]);
@@ -818,45 +819,74 @@
     // Le bouton mène au moyen de contact le plus direct parmi ceux renseignés.
     var direct = contacts.filter(function (c) { return c[1] === 'WhatsApp'; })[0] || contacts.filter(function (c) { return c[1] === 'E-mail'; })[0] || contacts[0];
     var talk = direct ? direct[0] : SITE.liens.whatsapp;
+    var external = function (href) { return /^https/.test(href) ? ' target="_blank" rel="noopener"' : ''; };
     // « Libellé : texte » : le libellé ressort en gras.
     function labelled(t) {
       var i = t.indexOf(' : ');
       return i > 0 && i < 70 ? '<b>' + esc(t.slice(0, i)) + '&nbsp;:</b> ' + esc(t.slice(i + 3)) : esc(t);
     }
+    function icon(d) {
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+    }
+    var ICON = {
+      conseil: icon('<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/>'),
+      panel: icon('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>'),
+      podcast: icon('<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.500"/><rect x="17" y="14" width="4" height="6" rx="1.500"/>')
+    };
+    var check = icon('<path d="M5 12.500l4.500 4.500L19 7.500"/>');
     var approach = [
       ['Ancrage culturel', 'Utiliser les langues locales comme vecteurs de transmission de la connaissance pour briser les barrières de la complexité.'],
       ['Pédagogie de terrain', 'Traduire des concepts abstraits (numérique, finance, innovation) en exemples concrets du quotidien, accessibles à tous les publics.'],
       ['Standard professionnel', 'Allier rigueur technique, maîtrise de la production audiovisuelle et sens du storytelling.']
     ];
+    var infos = [['Langues', 'Wolof et français'], ['Podcast', 'Wolof Tech, depuis juillet 2020']];
     document.getElementById('main').innerHTML =
-      '<section class="page-hero with-photo services-hero"><img src="assets/photos/agile-tour.jpg" alt="" width="1100" height="733" style="object-position:50% 30%"><div class="wrap">' +
-      '<h1>Faire comprendre l\'innovation à tous, sans barrière.</h1><p class="lead">Fort de plusieurs années d\'expérience dans la médiation technologique et la production audiovisuelle, j\'accompagne les entreprises, institutions et organisations à vulgariser leurs produits, services et savoirs pour toucher toutes les communautés, y compris le monde rural et les publics non scolarisés.</p>' +
-      '<div class="btn-row" style="margin-top:22px"><a class="btn btn-hero" href="#contact">Discutons de votre projet</a></div></div></section>' +
-      '<section class="block"><div class="wrap services">' + SERVICES.map(function (s, i) {
-        return '<article class="service" id="' + esc(s.id) + '"><img src="' + esc(s.image) + '" alt="" loading="lazy">' +
-          '<div><span class="service-num" aria-hidden="true">' + (i + 1) + '</span><h2>' + esc(s.titre) + '</h2>' +
-          '<dl class="service-facts"><div><dt>Pour qui&nbsp;?</dt><dd>' + esc(s.pourQui) + '</dd></div><div><dt>Le problème résolu</dt><dd>' + esc(s.probleme) + '</dd></div></dl>' +
-          '<h3>' + esc(s.solutionTitre) + '</h3><ul class="service-list">' + s.solution.map(function (l) { return '<li>' + labelled(l) + '</li>'; }).join('') + '</ul></div></article>';
-      }).join('') + '</div></section>' +
-      '<section class="on-saffron approach"><div class="wrap"><span class="kicker">Mon approche</span><h2>Une méthodologie unique basée sur l\'inclusion et la simplicité</h2>' +
-      '<div class="approach-grid">' + approach.map(function (a) {
-        return '<div class="approach-card"><h3>' + esc(a[0]) + '</h3><p>' + esc(a[1]) + '</p></div>';
+      '<section class="sv-hero"><img class="sv-hero-photo" src="assets/photos/services-hero.jpg" alt="' + esc(A.nom) + ' au micro dans son studio, casque sur les oreilles" width="941" height="1237" fetchpriority="high"><div class="wrap"><div class="sv-hero-txt">' +
+      '<p class="sv-kicker">' + esc(A.nom) + '</p><h1>Faire comprendre l\'innovation à tous, sans barrière.</h1>' +
+      '<p class="sv-lead">Fort de plusieurs années d\'expérience dans la médiation technologique et la production audiovisuelle, j\'accompagne les entreprises, institutions et organisations à vulgariser leurs produits, services et savoirs pour toucher toutes les communautés, y compris le monde rural et les publics non scolarisés.</p>' +
+      '<div class="btn-row"><a class="btn sv-main" href="#contact">Discutons de votre projet</a><a class="btn" href="#services">Voir mes services</a></div>' +
+      '<ul class="sv-stats"><li><b data-count="' + EPISODES.length + '">' + EPISODES.length + '</b> épisodes</li><li><b data-count="' + INVITES.length + '">' + INVITES.length + '</b> invités</li><li><b data-count="' + totalHours() + '">' + totalHours() + '</b> heures de contenus</li></ul>' +
+      '</div></div></section>' +
+
+      '<section class="sv-sec"><div class="wrap sv-about"><img class="sv-fade" src="assets/photos/services-portrait.jpg" alt="Portrait de ' + esc(A.nom) + ' au micro" width="1122" height="1108" loading="lazy">' +
+      '<div class="sv-fade"><p class="sv-kicker">À propos</p><h2>Rendre la technologie compréhensible par tous</h2><p class="sv-text">' + esc(A.bio[0]) + '</p>' +
+      '<ul class="sv-checks">' + ['Médiation technologique', 'Production audiovisuelle', 'Transmission en langues locales', 'Animation de débats'].map(function (t) { return '<li>' + check + esc(t) + '</li>'; }).join('') + '</ul>' +
+      '<dl class="sv-info">' + infos.map(function (x) { return '<div><dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd></div>'; }).join('') + '</dl></div></div></section>' +
+
+      '<section class="sv-sec sv-alt" id="services"><div class="wrap"><div class="sv-head"><p class="sv-kicker">Mes services</p><h2>Ce que je peux faire pour vous</h2></div>' +
+      '<div class="sv-cards">' + SERVICES.map(function (s) {
+        return '<article class="sv-card" id="' + esc(s.id) + '"><span class="sv-icon">' + (ICON[s.id] || ICON.conseil) + '</span><h3>' + esc(s.titre) + '</h3>' +
+          '<dl><dt>Pour qui&nbsp;?</dt><dd>' + esc(s.pourQui) + '</dd><dt>Le problème résolu</dt><dd>' + esc(s.probleme) + '</dd><dt>' + esc(s.solutionTitre) + '</dt></dl>' +
+          '<ul>' + s.solution.map(function (l) { return '<li>' + labelled(l) + '</li>'; }).join('') + '</ul></article>';
       }).join('') + '</div></div></section>' +
-      '<section id="contact" style="padding-block:clamp(40px,6vw,80px)"><div class="wrap"><div class="join contact-box"><div class="txt"><h2>Vous avez un projet, un produit à faire comprendre ou un événement à propulser ?</h2>' +
-      '<div class="btn-row" style="margin-top:22px"><a class="btn btn-main" href="' + esc(talk) + '"' + (/^https/.test(talk) ? ' target="_blank" rel="noopener"' : '') + '>Discutons de votre projet</a></div>' +
+
+      '<section class="sv-sec"><div class="wrap"><div class="sv-head"><p class="sv-kicker">Mon approche</p><h2>Une méthodologie unique basée sur l\'inclusion et la simplicité</h2></div>' +
+      '<div class="sv-steps">' + approach.map(function (a) {
+        return '<div class="sv-card sv-step"><h3>' + esc(a[0]) + '</h3><p>' + esc(a[1]) + '</p></div>';
+      }).join('') + '</div></div></section>' +
+
+      (PANELS.length ? '<section class="sv-sec sv-alt"><div class="wrap"><div class="sv-head"><p class="sv-kicker">Réalisations</p><h2>Sur scène et sur le terrain</h2></div>' +
+        '<div class="sv-works">' + PANELS.slice(0, 6).map(function (p) {
+          var where = [p.lieu, p.date].filter(Boolean).join(', ');
+          var inner = (p.image ? '<img src="' + esc(p.image) + '" alt="" loading="lazy" width="640" height="420">' : '') + '<div>' + (p.type ? '<span>' + esc(p.type) + '</span>' : '') + '<h3>' + esc(p.titre) + '</h3>' + (where ? '<p>' + esc(where) + '</p>' : '') + '</div>';
+          return p.lien ? '<a class="sv-card sv-work" href="' + esc(p.lien) + '" target="_blank" rel="noopener">' + inner + '</a>' : '<article class="sv-card sv-work">' + inner + '</article>';
+        }).join('') + '</div></div></section>' : '') +
+
+      '<section class="sv-cta" id="contact"><img src="assets/photos/table.jpg" alt="" loading="lazy" width="1400" height="788"><div class="wrap"><h2>Vous avez un projet, un produit à faire comprendre ou un événement à propulser&nbsp;?</h2>' +
+      '<a class="btn sv-main" href="' + esc(talk) + '"' + external(talk) + '>Discutons de votre projet</a>' +
       (contacts.length
-        ? '<ul class="contact-list">' + contacts.map(function (c) {
-            return '<li><a href="' + esc(c[0]) + '"' + (c[1] === 'WhatsApp' ? ' target="_blank" rel="noopener"' : '') + '><small>' + c[1] + '</small>' + esc(c[2]) + '</a></li>';
+        ? '<ul class="sv-contacts">' + contacts.map(function (c) {
+            return '<li><a href="' + esc(c[0]) + '"' + external(c[0]) + '><small>' + c[1] + '</small>' + esc(c[2]) + '</a></li>';
           }).join('') + '</ul>'
         : '<p>Mes coordonnées seront bientôt affichées ici. En attendant, retrouvez-moi sur la chaîne WhatsApp.</p>') +
-      '</div><img src="assets/photos/banniere.jpg" alt="" loading="lazy" width="1100" height="733"></div></div></section>';
+      '</div></section>';
     if (location.hash) scrollToHash();
   }
 
   /* ---------- Animations : rien n'est masqué si le visiteur préfère réduire les mouvements ---------- */
   function initMotion() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var targets = '.platforms, .latest > *, .head-row, .vid-card, .more-row, .facts .why, .gallery-head, .track, .panel-card, .support-box, .approach-card, .duo > *, .index li, .join, .service, .season, .people-sec h2, .person, .bio, .bio-socials, .mosaic img, .comments .wrap, .ep-video, .audio-strip, .ep-layout > *';
+    var targets = '.platforms, .latest > *, .head-row, .vid-card, .more-row, .facts .why, .gallery-head, .track, .panel-card, .support-box, .sv-fade, .sv-card, .duo > *, .index li, .join, .season, .people-sec h2, .person, .bio, .bio-socials, .mosaic img, .comments .wrap, .ep-video, .audio-strip, .ep-layout > *';
     var rise = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (!en.isIntersecting) return;
