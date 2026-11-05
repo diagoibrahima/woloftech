@@ -51,7 +51,16 @@ a.tag:hover { background: var(--white); }
 #head { display: contents; }
 .site-head { position: sticky; top: 0; z-index: 30; background: var(--wine); }
 .site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 76px; }
-.brand { flex: none; width: 92px; margin-block: -8px; }
+.brand { --logo: 92px; flex: none; display: grid; align-items: center; justify-items: start; width: var(--logo); margin-block: -8px; color: inherit; text-decoration: none; }
+.brand > * { grid-area: 1 / 1; }
+.brand img { width: var(--logo); }
+.brand-word { display: none; }
+.brand-home { width: auto; }
+.brand-home .brand-word { display: block; font: 800 clamp(1.4rem, 2.4vw, 1.75rem)/1 var(--head); letter-spacing: -0.03em; }
+.brand-home img { visibility: hidden; opacity: 0; }
+.site-head.scrolled .brand-home img { visibility: visible; opacity: 1; }
+.site-head.scrolled .brand-home .brand-word { visibility: hidden; opacity: 0; }
+.menu-btn { display: none; }
 .nav { display: flex; align-items: center; gap: clamp(2px, 1.5vw, 14px); }
 .nav a { padding: 10px 12px; border-radius: 999px; font: 700 1.02rem/1 var(--head); text-decoration: none; transition: background-color .18s, color .18s; }
 .nav a:hover { background: var(--white); color: var(--ink); }
@@ -66,9 +75,7 @@ a.tag:hover { background: var(--white); }
 .stage { position: relative; margin-bottom: 62px; }
 .stage::before { content: ''; position: absolute; inset: -3% -2% -5% -3%; background: var(--saffron); border-radius: clamp(18px, 2.4vw, 34px); transform: rotate(-3.5deg); }
 .stage > img { position: relative; width: 100%; aspect-ratio: 3 / 2; border-radius: clamp(16px, 2vw, 28px); }
-.stage .topics { position: absolute; top: 14px; right: 14px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.stage .topics span { padding: 0.3em 0.8em; border-radius: 999px; background: var(--ink); font: 600 0.88rem/1.2 var(--text); }
-.stage .topics span:first-child { background: var(--saffron); color: var(--ink); }
+.stage img.stage-logo { position: absolute; inset: 14px 14px auto auto; width: clamp(78px, 9vw, 112px); height: auto; aspect-ratio: 5 / 3; object-fit: cover; border-radius: 0; background: none; }
 .pill { position: absolute; right: -6px; bottom: -44px; display: flex; align-items: center; gap: 12px; width: min(330px, 62%); padding: 9px 20px 9px 9px; border-radius: 999px; background: var(--white); color: var(--ink); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35); }
 .pill .play-big { width: 56px; height: 56px; background: var(--red); color: var(--white); }
 .pill .play-big:hover { background: var(--ink); }
@@ -360,7 +367,7 @@ a.tag:hover { background: var(--white); }
 }
 @media (max-width: 640px) {
   :root { --bar: 72px; }
-  .brand { width: 74px; }
+  .brand { --logo: 74px; }
   .site-head .wrap { min-height: 64px; gap: 6px; }
   .nav { gap: 0; }
   .nav a { padding: 9px 9px; font-size: 0.93rem; }
@@ -369,7 +376,6 @@ a.tag:hover { background: var(--white); }
   .pill { right: 4px; bottom: -30px; width: 70%; }
   .pill .play-big { width: 48px; height: 48px; }
   .stage { margin-bottom: 40px; }
-  .stage .topics { display: none; }
   .guest-card { display: none; }
   .latest, .latest.wide { grid-template-columns: minmax(0, 1fr); }
   .teaser { width: min(70%, 260px); box-shadow: 10px 10px 0 var(--red); }
@@ -442,10 +448,6 @@ a.tag:hover { background: var(--ink); color: var(--white); }
 /* Haut de l'accueil : la plaque reprend les trois bandes du drapeau */
 .hero h1 em { color: inherit; padding-bottom: 0.06em; background: var(--flag) 0 100% / 100% 0.1em no-repeat; }
 .stage::before { background: var(--flag); }
-.stage .topics span { color: var(--white); }
-.stage .topics span:first-child { background: var(--saffron); }
-.stage .topics span:nth-child(2) { background: var(--green); }
-.stage .topics span:nth-child(3) { background: var(--red); }
 .guest-card span { color: var(--soft); }
 .guest-card, .pill, .platforms { box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16); }
 .platforms a:hover { color: var(--green); }
@@ -680,13 +682,20 @@ body.has-player .banga { --from-bottom: calc(var(--bar) + 16px); }
   .shorts.full { width: 100%; }
 }.shorts:has(iframe) .short-hint { display: none; }
 
-/* Cinq liens dans l'en-tête : sur petit écran, le menu défile au doigt */
+/* La bande noire devient translucide au défilement : le texte blanc reste lisible sur fond clair */
+.site-head.scrolled { background: rgba(11, 11, 11, 0.58); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.site-head.scrolled.menu-open { background: var(--ink); }
+
+/* Menu hamburger sur téléphone */
 @media (max-width: 760px) {
-  .site-head .wrap { gap: 10px; }
-  .site-head .brand { flex: none; }
-  .nav { flex: 1; min-width: 0; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
-  .nav::-webkit-scrollbar { display: none; }
-  .nav a { flex: none; white-space: nowrap; }
+  .menu-btn { flex: none; display: grid; align-content: center; justify-items: center; gap: 5px; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 12px; background: none; color: inherit; cursor: pointer; }
+  .menu-btn span { display: block; width: 26px; height: 3px; border-radius: 2px; background: currentColor; }
+  .menu-open .menu-btn span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .menu-open .menu-btn span:nth-child(2) { opacity: 0; }
+  .menu-open .menu-btn span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+  .nav { position: absolute; top: 100%; left: 0; right: 0; display: none; flex-direction: column; align-items: stretch; gap: 4px; max-height: calc(100dvh - 69px); overflow-y: auto; padding: 10px var(--gutter) 16px; background: var(--ink); box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35); }
+  .menu-open .nav { display: flex; }
+  .nav a { display: flex; align-items: center; min-height: 48px; padding: 8px 14px; border-radius: 12px; font-size: 1.1rem; }
 }
 
 /* ---------- Animations et effets ---------- */
@@ -702,7 +711,10 @@ body.has-player .banga { --from-bottom: calc(var(--bar) + 16px); }
   /* En-tête : le drapeau se déploie, le logo réagit */
   @keyframes unroll { from { transform: scaleX(0); } to { transform: scaleX(1); } }
   .site-head::after { transform-origin: left; animation: unroll .9s cubic-bezier(.2, .7, .2, 1) both; }
-  .site-head { transition: box-shadow .25s; }
+  .site-head { transition: box-shadow .25s, background-color .25s; }
+  .brand-word, .brand-home img { transition: opacity .25s, visibility .25s; }
+  .menu-btn span { transition: transform .2s, opacity .2s; }
+  .menu-open .nav { animation: enter .22s cubic-bezier(.2, .7, .2, 1) both; }
   .site-head.scrolled { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28); }
   .brand { transition: transform .25s cubic-bezier(.3, 1.6, .5, 1); }
   .brand:hover { transform: rotate(-4deg) scale(1.06); }
@@ -720,12 +732,10 @@ body.has-player .banga { --from-bottom: calc(var(--bar) + 16px); }
   .hero .btn-row { animation: enter .8s .24s cubic-bezier(.2, .7, .2, 1) both; }
   .stage > img { animation: enter .9s .1s cubic-bezier(.2, .7, .2, 1) both; }
   .stage::before { animation: plate 1.1s .1s cubic-bezier(.2, .7, .2, 1) both; }
-  .stage .topics, .pill, .guest-card { transform: translate(calc(var(--mx, 0) * var(--pull, 18px)), calc(var(--my, 0) * var(--pull, 18px))); transition: transform .25s ease-out; }
-  .stage .topics { --pull: -22px; animation: enter .8s .5s cubic-bezier(.2, .7, .2, 1) both; }
+  .stage img.stage-logo, .pill, .guest-card { transform: translate(calc(var(--mx, 0) * var(--pull, 18px)), calc(var(--my, 0) * var(--pull, 18px))); transition: transform .25s ease-out; }
+  .stage img.stage-logo { --pull: -22px; animation: enter .8s .5s cubic-bezier(.2, .7, .2, 1) both; }
   .pill { --pull: 26px; animation: enter .8s .65s cubic-bezier(.2, .7, .2, 1) both, bob 5s 1.5s ease-in-out infinite; }
   .guest-card { --pull: 16px; animation: enter .8s .8s cubic-bezier(.2, .7, .2, 1) both, bob 6s 1.7s ease-in-out infinite; }
-  .stage .topics span { transition: transform .2s; }
-  .stage .topics span:hover { transform: scale(1.08); }
 
   /* Haut des autres pages */
   @keyframes drift { from { transform: scale(1); } to { transform: scale(1.08); } }

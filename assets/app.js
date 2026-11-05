@@ -894,11 +894,6 @@
     }, { threshold: 0.6 });
     document.querySelectorAll('[data-count]').forEach(function (el) { counters.observe(el); });
 
-    var head = document.querySelector('.site-head');
-    function onScroll() { head.classList.toggle('scrolled', window.scrollY > 12); }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
     // Sur l'accueil, les cartes flottantes suivent légèrement la souris.
     var hero = document.querySelector('.hero');
     if (hero && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -919,6 +914,32 @@
     }
   }
 
+  /* ---------- En-tête : bande transparente au défilement et menu du téléphone ---------- */
+  function initHeader() {
+    var head = document.querySelector('.site-head'), btn = head.querySelector('.menu-btn');
+    function onScroll() { head.classList.toggle('scrolled', window.scrollY > 12); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    function setMenu(open) {
+      head.classList.toggle('menu-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    }
+    btn.addEventListener('click', function () { setMenu(!head.classList.contains('menu-open')); });
+    document.addEventListener('click', function (ev) {
+      if (head.classList.contains('menu-open') && !head.contains(ev.target)) setMenu(false);
+    });
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && head.classList.contains('menu-open')) { setMenu(false); btn.focus(); }
+    });
+    head.querySelector('.nav').addEventListener('click', function (ev) {
+      if (ev.target.closest('a')) setMenu(false);
+    });
+    window.matchMedia('(min-width: 761px)').addEventListener('change', function (ev) {
+      if (ev.matches) setMenu(false);
+    });
+  }
+
   /* ---------- Gabarit commun ---------- */
   function renderChrome() {
     var page = document.body.dataset.page;
@@ -926,8 +947,10 @@
     document.getElementById('head').innerHTML =
       '<a class="skip" href="#main">Aller au contenu</a>' +
       '<header class="site-head"><div class="wrap">' +
-      '<a class="brand" href="index.html"><img src="assets/logo.png" alt="Podcast Wolof Tech, accueil" width="500" height="500"></a>' +
-      '<nav class="nav" aria-label="Navigation principale">' + links.map(function (l) {
+      // Sur l'accueil, le mot WolofTech laisse la place au logo dès que la page défile.
+      '<a class="brand' + (page === 'accueil' ? ' brand-home' : '') + '" href="index.html" aria-label="Podcast Wolof Tech, accueil"><span class="brand-word" aria-hidden="true">WolofTech</span><img src="assets/logo.png" alt="" width="500" height="500"></a>' +
+      '<button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>' +
+      '<nav class="nav" id="site-nav" aria-label="Navigation principale">' + links.map(function (l) {
         return '<a href="' + l[1] + '"' + (page === l[0] ? ' aria-current="page"' : '') + '>' + l[2] + '</a>';
       }).join('') + '</nav></div></header>';
     var L = SITE.liens;
@@ -974,7 +997,7 @@
       '<div class="btn-row">' + watchLatest('Regarder le dernier épisode') +
       '<a class="btn" href="episodes.html">Tous les épisodes</a></div></div>' +
       '<div class="stage"><img src="assets/photos/hero-1600.jpg" alt="' + esc(A.nom) + ' au micro dans le studio Wolof Tech, avec le bureau, l\'interface audio et les documents de l\'émission" width="1600" height="1067" fetchpriority="high">' +
-      '<div class="topics" aria-hidden="true"><span>IA</span><span>Fintech</span><span>Cybersécurité</span></div>' +
+      '<img class="stage-logo" src="assets/logo.png" alt="Logo du podcast Wolof Tech" width="500" height="500">' +
       (guests.length ? '<a class="guest-card" href="' + epUrl(latest) + '"><img src="' + esc(latest.image) + '" alt="" width="58" height="58"><div><b>' + esc(guests[0].nom) + '</b><span>Invité du dernier épisode</span><u>Voir l\'épisode</u></div></a>' : '') +
       '<div class="pill">' + playBtn(latest) + waveHtml(latest, 34) + '</div>' +
       '</div></div></section>' +
@@ -1339,6 +1362,7 @@
   }
 
   renderChrome();
+  initHeader();
   ({ accueil: renderHome, episodes: renderEpisodes, episode: renderEpisode, communaute: renderCommunaute, auteur: renderAuteur, shorts: renderShorts, services: renderServices })[document.body.dataset.page]();
   Player.init();
   initWatch();
