@@ -977,22 +977,6 @@ window.WT_EPISODES = [
         "image":  "assets/episodes/s8e3.jpg"
     },
     {
-        "id":  "S8E2",
-        "season":  8,
-        "episode":  2,
-        "part":  0,
-        "kind":  "episode",
-        "title":  "Microsoft 365, l\u0027Office dans les nuages",
-        "date":  "2022-06-05",
-        "duration":  "01:04:35",
-        "summary":  "Constitué de la suite Office (Word, Excel, PowerPoint, Outlook, OneNote, Publisher et Access), ainsi que d\u0027un ensemble de services en ligne tels que OneDrive, Exchange…",
-        "description":  "Constitué de la suite Office (Word, Excel, PowerPoint, Outlook, OneNote, Publisher et Access), ainsi que d\u0027un ensemble de services en ligne tels que OneDrive, Exchange Online, SharePoint Online, Teams et Yammer, Microsoft 365 est un produit de Microsoft qui propose des offres pour les particuliers (Microsoft 365 Personnel et Microsoft 365 Famille), les TPE/PME ainsi que les entreprises.\nDans cet épisodes nous allons a la découverte de cette suite d\u0027outils de Microsoft\nInvité\nEl Hadji Malang DIEDHIOU (Consultant spécialisé en technologies Microsoft )\nlinkedIn Twitter\nProgrammes :\nQ1 :  Qui est el hadji Malang Diedhiou ? Pouvez-vous nous parler un peu de votre parcours ?\nQ2 : En matière de bureautique, la première chose qui vient à l’esprit c’est Microsoft Office, C’est quoi Microsoft office et son utilité ?\nQ3 : Avec l’évolution des Tech et des besoins des utilisateurs cette suite d’application est passée par plusieurs versions jusqu’à devenir MS 365, C’est quoi Ms 365 et comment pouvez-vous nous expliquer cette évolution ?\nQ4 : Quels sont les applications et services qui constituent Microsoft 365 et quelles sont leurs utilités ?\nQ5 : Quel est l’avantage d’utiliser MS 365 dans les entreprises mais aussi pour les particuliers ?\nQ6 : Comment cette suite d’application est mise à notre disposition (Payante ou gratuite) ? Sachant que beaucoup d’apprenant n’ont pas les possibilités d’abonnement, quel sont les solutions qui s’offre à eux pour se familiariser avec l’outil ?\nQ7 : Comment pouvez-vous nous expliquer les licences Office 365 (E1, E2, E5) et comment choisir en fonction de la configuration des entreprises ?\nQ8 : Si Ms 365 regroupe des App et services sur le cloud, quelle est sa relation avec Microsoft Azure qui sera l’objet de notre prochain épisode ?\nQ9 :  Quel est votre message à toute la jeunesse par rapport à l\u0027utilité de MS365 mais aussi de l\u0027ensemble des produits Microsoft qui sont méconnus par beaucoup de jeunes ?",
-        "audio":  "https://anchor.fm/s/2d912044/podcast/play/53043862/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2022-5-5%2F243667d1-6178-e449-537b-a5cad8246b11.mp3",
-        "spotify":  "https://creators.spotify.com/pod/show/woloftech/episodes/S8E2---Microsoft-365--lOffice-dans-les-nuages-e1jh96m",
-        "video":  "dXxWfvG_y4c",
-        "image":  "assets/episodes/s8e2.jpg"
-    },
-    {
         "id":  "S8E1P2",
         "season":  8,
         "episode":  1,
@@ -1601,22 +1585,6 @@ window.WT_EPISODES = [
         "image":  "assets/episodes/s5e1.jpg"
     },
     {
-        "id":  "S4E13",
-        "season":  4,
-        "episode":  13,
-        "part":  0,
-        "kind":  "episode",
-        "title":  "Sécurité, sauvez l\u0027informatique",
-        "date":  "2021-03-13",
-        "duration":  "01:10:57",
-        "summary":  "La sécurité informatique, est l’ensemble des moyens techniques, organisationnels, juridiques et humains nécessaires à la mise en place de moyens visant à empêcher…",
-        "description":  "La sécurité informatique, est l’ensemble des moyens techniques, organisationnels, juridiques et humains nécessaires à la mise en place de moyens visant à empêcher l\u0027utilisation non autorisée, le mauvais usage, la modification ou le détournement du système d’information.\nAvec le développement de l\u0027internet et la digitalisation des entreprises et organisation, les menaces visant les systèmes d\u0027information sont de plus en plus récurrentes, ce qui fait qu\u0027aujourd\u0027hui la sécurité informatique est une nécessité pour tous type de structure.\nProgramme :\nC’est quoi la sécurité informatique ?\nC’est quoi un système d’information et quels sont ces différents composants ?\nPourquoi protéger ces différents composants et quels sont les objectifs de la sécurité informatique ?\nPouvez-vous nous donner quelques problèmes de sécurité liés aux composants (hardware et software)\nPouvez-vous nous donner quelques problèmes de sécurité liés aux composants\nC’est quoi une politique de sécurité dans une entreprise ?\nC’est quoi la cryptographie que représente-t-elle sans la sécurité informatique ?\nC’est quoi la cybersécurité quelle est sa différence avec la sécurité informatique ?\nQuels conseils vous donner aux développeurs par rapport à la sécurité informatique\nInvités :\nGérard DACOSTA (Computer security engineer) Twitter LinkeIn\nBamba BATHILY (Cybersecurity Analyst) Twitter, LinkedIn",
-        "audio":  "https://anchor.fm/s/2d912044/podcast/play/28833696/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-2-13%2F51b3539e-cde0-b6f1-18c9-90e41a446cc4.mp3",
-        "spotify":  "https://creators.spotify.com/pod/show/woloftech/episodes/S4P2E13---Scurit--sauvez-linformatique-eseef0",
-        "video":  "dFm2v1trUJ4",
-        "image":  "assets/episodes/s4e13.jpg"
-    },
-    {
         "id":  "S4E12",
         "season":  4,
         "episode":  12,
@@ -1983,22 +1951,6 @@ window.WT_EPISODES = [
         "spotify":  "https://creators.spotify.com/pod/show/woloftech/episodes/Les-applications-informatiques-ei8k03",
         "video":  "azPW7dSb_4I",
         "image":  "assets/episodes/s1e5.jpg"
-    },
-    {
-        "id":  "S1E2",
-        "season":  1,
-        "episode":  2,
-        "part":  0,
-        "kind":  "episode",
-        "title":  "C\u0027est quoi un ordinateur",
-        "date":  "2020-07-24",
-        "duration":  "00:30:33",
-        "summary":  "Dans cet épisode nous parlons de l’origine des ordinateurs en passant en revue la nature de ces composants et leur organisation interne (hardware). Dans la seconde…",
-        "description":  "Dans cet épisode nous parlons de l’origine des ordinateurs en passant en revue la nature de ces composants et leur organisation interne (hardware). Dans la seconde partie nous parlerons des logiciels qui constituent la partie software de l’ordinateur.\nInscrivez-vous à la newsletter pour être informé des derniers épisodes : https://bit.ly/2ZRZMkJ\nVisiter notre blog pour plus d’informations :\nhttps://bit.ly/2OP1FZb",
-        "audio":  "https://anchor.fm/s/2d912044/podcast/play/17026833/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2020-6-24%2F345087d9-8e56-007e-4351-5d50b0c6ed3f.mp3",
-        "spotify":  "https://creators.spotify.com/pod/show/woloftech/episodes/Cest-quoi-un-ordinateur-eh64ah",
-        "video":  "Z85q6ZbNShk",
-        "image":  "assets/episodes/s1e2.jpg"
     },
     {
         "id":  "S1E1P2",
