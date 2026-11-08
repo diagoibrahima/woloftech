@@ -34,6 +34,9 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS gallery (
     id INTEGER PRIMARY KEY, image TEXT NOT NULL, alt TEXT NOT NULL DEFAULT '', largeur INTEGER NOT NULL DEFAULT 0, hauteur INTEGER NOT NULL DEFAULT 0, pos INTEGER NOT NULL DEFAULT 0
   );
+  CREATE TABLE IF NOT EXISTS episode_photos (
+    id INTEGER PRIMARY KEY, episode TEXT NOT NULL, image TEXT NOT NULL, alt TEXT NOT NULL DEFAULT '', largeur INTEGER NOT NULL DEFAULT 0, hauteur INTEGER NOT NULL DEFAULT 0, pos INTEGER NOT NULL DEFAULT 0
+  );
   CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY, episode TEXT NOT NULL, nom TEXT NOT NULL, texte TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'pending', created INTEGER NOT NULL, ip_hash TEXT
@@ -171,6 +174,7 @@ const allGuests = () => db.prepare('SELECT * FROM guests ORDER BY nom COLLATE NO
 const allShorts = () => db.prepare('SELECT * FROM shorts ORDER BY pos, id').all();
 const allPanels = () => db.prepare('SELECT * FROM panels ORDER BY pos, id').all();
 const allGallery = () => db.prepare('SELECT * FROM gallery ORDER BY pos, id').all();
+const allEpisodePhotos = () => db.prepare('SELECT * FROM episode_photos ORDER BY pos, id').all();
 
 function episodeMeta() {
   return db.prepare('SELECT * FROM episode_meta').all().map((m) => ({ ...m, sponsors: JSON.parse(m.sponsors), detected: m.detected ? JSON.parse(m.detected) : null }));
@@ -190,11 +194,14 @@ function buildExport() {
     ['linkedin', 'instagram', 'facebook', 'x', 'avatar'].forEach((k) => { if (g[k]) out[k] = g[k]; });
     return out;
   });
+  const photos = {};
+  allEpisodePhotos().forEach(({ id, pos, episode, ...p }) => { (photos[episode] = photos[episode] || []).push(p); });
   const values = {
     WT_INVITES: guests,
     WT_SHORTS: allShorts().map((s) => ({ video: s.video, titre: s.titre, episode: s.episode })),
     WT_PANELS: allPanels().map(({ id, pos, ...p }) => p),
     WT_GALLERY: allGallery().map(({ id, pos, ...p }) => p),
+    WT_EPISODE_PHOTOS: photos,
     WT_RESEAUX: getSetting('reseaux', {}),
     WT_CONTACT: getSetting('contact', {}),
     WT_SERVICES: getSetting('services', []),
@@ -219,4 +226,4 @@ upgrade();
 // Au-delà de 30 jours, l'empreinte d'adresse IP ne sert plus à limiter les envois.
 db.prepare('UPDATE comments SET ip_hash = NULL WHERE created < ?').run(Date.now() - 30 * 864e5);
 
-module.exports = { ROOT, DB_FILE, db, staticEpisodes, secteurs, getSetting, setSetting, secret, allGuests, allShorts, allPanels, allGallery, episodeMeta, buildExport, writeExport };
+module.exports = { ROOT, DB_FILE, db, staticEpisodes, secteurs, getSetting, setSetting, secret, allGuests, allShorts, allPanels, allGallery, allEpisodePhotos, episodeMeta, buildExport, writeExport };

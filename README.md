@@ -16,11 +16,11 @@ Au premier lancement, le mot de passe provisoire est écrit dans `backend/data/p
 
 Le flux RSS est lu au démarrage puis toutes les 6 heures, tant que le backend tourne. Chaque nouvel épisode apparaît dans « À compléter » pour y ajouter invités, sponsors et vidéo.
 
-Chaque enregistrement réécrit `data/contenu.js`, le fichier que lisent les pages : invités et avatars, shorts, panels et invitations, photos du studio, services, contacts, réseaux sociaux, sponsors et épisodes détectés. Publier ce fichier et `assets/uploads/` suffit à mettre à jour un hébergement statique comme GitHub Pages. Les commentaires, eux, exigent un backend en ligne : sans lui, leur section ne s'affiche pas.
+Chaque enregistrement réécrit `data/contenu.js`, le fichier que lisent les pages : invités et avatars, shorts, panels et invitations, photos du studio, photothèques des épisodes, services, contacts, réseaux sociaux, sponsors et épisodes détectés. Publier ce fichier et `assets/uploads/` suffit à mettre à jour un hébergement statique comme GitHub Pages. Les commentaires, eux, exigent un backend en ligne : sans lui, leur section ne s'affiche pas.
 
 `backend/data/` contient la base et n'entre jamais dans le dépôt : à sauvegarder séparément.
 
-Pour une mise en ligne, placer le backend derrière un proxy HTTPS, avec `HOST`, `PORT`, `WT_TRUST_PROXY=1` et `WT_COOKIE_SECURE=1`.
+Pour une mise en ligne, placer le backend derrière un proxy HTTPS, avec `HOST`, `PORT`, `WT_TRUST_PROXY=1` et `WT_COOKIE_SECURE=1`. Le guide [deploy/GUIDE-OVH.md](deploy/GUIDE-OVH.md) et les scripts du dossier `deploy/` font cette installation sur un VPS.
 
 ## Site
 

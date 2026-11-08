@@ -149,6 +149,41 @@ test("les photos du studio s'ajoutent, s'ordonnent et se retirent", async () => 
   assert.strictEqual((await api('DELETE', '/api/admin/gallery/' + photos[1].id)).status, 200);
   assert.ok(fs.existsSync(path.join(ROOT, photos[1].image)));
 });
+test("la photothèque d'un épisode alimente sa page et, au choix, le diaporama", async () => {
+  const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]);
+  const { path: image } = await (await api('POST', '/api/admin/upload', png)).json();
+  assert.strictEqual((await api('POST', '/api/admin/photos', { image, episode: 'S99E9' })).status, 400);
+  assert.strictEqual((await api('POST', '/api/admin/photos', { image, episode: '' })).status, 400);
+  assert.strictEqual((await api('POST', '/api/admin/photos', { image: '../secret.png', episode: 'S15E5' })).status, 400);
+  assert.strictEqual((await api('POST', '/api/admin/photos', { image, episode: 'S15E5', alt: 'Au studio', largeur: 800, hauteur: 600 })).status, 200);
+  const list = async () => (await (await api('GET', '/api/admin/photos')).json()).photos;
+  const gallery = async () => (await (await api('GET', '/api/admin/gallery')).json()).photos;
+  const photo = (await list()).find((p) => p.image === image);
+  assert.strictEqual(photo.inGallery, false);
+  assert.ok(!(await gallery()).some((g) => g.image === image));
+  const js = await (await fetch(BASE + '/data/contenu.js')).text();
+  const w = {};
+  new Function('window', js)(w);
+  assert.strictEqual(w.WT_EPISODE_PHOTOS.S15E5[0].alt, 'Au studio');
+  // Choisie pour le diaporama, une seule fois même si on insiste.
+  await api('PUT', '/api/admin/photos/' + photo.id + '/gallery', { on: true });
+  await api('PUT', '/api/admin/photos/' + photo.id + '/gallery', { on: true });
+  assert.strictEqual((await gallery()).filter((g) => g.image === image).length, 1);
+  assert.strictEqual((await gallery())[0].image, image);
+  assert.strictEqual((await list()).find((p) => p.id === photo.id).inGallery, true);
+  // Une description modifiée suit dans le diaporama.
+  await api('PUT', '/api/admin/photos/' + photo.id, { alt: 'Nouvelle description' });
+  assert.strictEqual((await gallery())[0].alt, 'Nouvelle description');
+  // Hors du diaporama, le fichier reste : il sert encore à la photothèque.
+  await api('PUT', '/api/admin/photos/' + photo.id + '/gallery', { on: false });
+  assert.ok(!(await gallery()).some((g) => g.image === image));
+  assert.ok(fs.existsSync(path.join(ROOT, image)));
+  // Retirée de la photothèque alors qu'elle est au diaporama : elle disparaît partout.
+  await api('PUT', '/api/admin/photos/' + photo.id + '/gallery', { on: true });
+  assert.strictEqual((await api('DELETE', '/api/admin/photos/' + photo.id)).status, 200);
+  assert.ok(!(await gallery()).some((g) => g.image === image));
+  assert.ok(!fs.existsSync(path.join(ROOT, image)));
+});
 test("les services et les réseaux se modifient, un lien dangereux est refusé", async () => {
   const { contact, services, reseaux } = await (await api('GET', '/api/admin/settings')).json();
   assert.deepStrictEqual(services.map((s) => s.id), ['conseil', 'panel', 'podcast']);

@@ -552,6 +552,11 @@ a.panel-card:hover { transform: translateY(-3px); }
 .panel-txt { padding: 16px 18px 20px; }
 .panel-txt h3 { margin-top: 10px; font-size: 1.3rem; }
 .panel-txt p { margin: 6px 0 0; font-size: 0.97rem; }
+.track.panel-track { padding-block: 6px 24px; }
+.panel-track .panel-card:first-child { border-radius: 0 clamp(12px, 1.6vw, 20px) clamp(12px, 1.6vw, 20px) 0; }
+.panel-track .panel-card { flex: none; width: min(82vw, 360px); scroll-snap-align: start; }
+.track.panel-track .panel-card img { width: 100%; height: auto; border-radius: 0; aspect-ratio: 3 / 2; background: none; filter: none; }
+.panels-more { margin-top: 8px; }
 
 /* Services */
 
@@ -696,6 +701,49 @@ body[data-page='services'] .banga :focus-visible { outline-color: var(--green); 
   .sv-card { transition: border-color .18s, transform .22s cubic-bezier(.2, .7, .2, 1); }
   .sv-cards .sv-card:hover, a.sv-work:hover { transform: translateY(-4px); border-color: #55554f; }
   .sv-hero-txt { animation: enter .8s cubic-bezier(.2, .7, .2, 1) both; }
+}
+
+/* Photothèque d'un épisode */
+.ep-photos-sec { margin-top: clamp(26px, 4vw, 42px); }
+.ep-photos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: clamp(78px, 10.5vw, 132px); grid-auto-flow: dense; gap: clamp(6px, 0.8vw, 10px); }
+.ep-photo { display: block; padding: 0; border: 0; border-radius: clamp(8px, 1vw, 12px); overflow: hidden; background: var(--wine-3); cursor: zoom-in; }
+.ep-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ep-photo:nth-child(5n + 1) { grid-column: span 2; grid-row: span 2; }
+.ep-photos[data-n='1'] .ep-photo { grid-column: 1 / -1; grid-row: span 3; }
+.ep-photos[data-n='2'] .ep-photo { grid-column: span 2; grid-row: span 2; }
+.ep-photos[data-n='3'] .ep-photo:not(:first-child), .ep-photos[data-n='4'] .ep-photo:nth-child(2) { grid-column: span 2; }
+.ep-photo:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+
+/* Visionneuse de photos */
+.viewer { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; background: rgba(5, 5, 5, 0.94); color: var(--white); }
+.viewer::backdrop { background: rgba(5, 5, 5, 0.94); }
+/* Le glissement change de photo : il ne doit pas déclencher le retour en arrière du navigateur. */
+html:has(.viewer[open]), html:has(.viewer[open]) body { overflow: hidden; overscroll-behavior: none; }
+.viewer { overscroll-behavior: none; touch-action: pinch-zoom; }
+.viewer[open] { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; }
+.viewer figure { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; height: 100dvh; margin: 0; padding: clamp(14px, 3vh, 34px) 8px; }
+.viewer img { min-height: 0; max-width: 100%; max-height: calc(100dvh - 90px); border-radius: 8px; object-fit: contain; }
+.viewer figcaption { max-width: 60em; color: #dededb; font-size: 0.95rem; text-align: center; }
+.viewer-nav, .viewer-shut { display: grid; place-items: center; width: 50px; height: 50px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.14); color: var(--white); cursor: pointer; }
+.viewer-nav { margin-inline: clamp(6px, 2vw, 24px); }
+.viewer-nav:hover, .viewer-shut:hover { background: var(--saffron); color: var(--ink); }
+.viewer-nav svg, .viewer-shut svg { width: 22px; height: 22px; }
+.viewer-shut { position: absolute; top: 12px; right: 12px; z-index: 1; }
+.viewer.single .viewer-nav { visibility: hidden; }
+.viewer :focus-visible { outline: 3px solid var(--saffron); outline-offset: 2px; }
+@media (max-width: 620px) {
+  .viewer[open] { grid-template-columns: minmax(0, 1fr); }
+  .viewer-nav { position: absolute; bottom: 10px; z-index: 1; width: 46px; height: 46px; margin: 0; }
+  .viewer-nav.prev { left: 12px; }
+  .viewer-nav.next { right: 12px; }
+  .viewer figure { padding-bottom: 66px; }
+  .viewer img { max-height: calc(100dvh - 130px); }
+  .viewer figcaption { padding-inline: 58px; font-size: 0.86rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ep-photo img { transition: transform .35s cubic-bezier(.2, .7, .2, 1); }
+  .ep-photo:hover img { transform: scale(1.05); }
+  .viewer[open] { animation: enter .2s ease-out both; }
 }
 
 /* Commentaires */

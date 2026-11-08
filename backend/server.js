@@ -136,8 +136,22 @@ function networks(r) {
 // Une image envoyée qui ne sert plus quitte aussi le site : son adresse ne doit pas rester accessible.
 function removeUnusedUpload(image) {
   if (!/^assets\/uploads\//.test(image)) return;
-  const used = db.prepare('SELECT (SELECT COUNT(*) FROM gallery WHERE image = ?1) + (SELECT COUNT(*) FROM panels WHERE image = ?1) + (SELECT COUNT(*) FROM guests WHERE avatar = ?1) AS n').get(image).n;
+  const used = db.prepare('SELECT (SELECT COUNT(*) FROM gallery WHERE image = ?1) + (SELECT COUNT(*) FROM episode_photos WHERE image = ?1) + (SELECT COUNT(*) FROM panels WHERE image = ?1) + (SELECT COUNT(*) FROM guests WHERE avatar = ?1) AS n').get(image).n;
   if (!used) fs.rmSync(path.join(ROOT, 'assets', 'uploads', path.basename(image)), { force: true });
+}
+function photoSize(v) {
+  const n = Math.round(Number(v));
+  return n > 0 && n <= 20000 ? n : 0;
+}
+function requiredImage(v) {
+  const image = localImage(v);
+  if (!image) throw new HttpError(400, "L'image est obligatoire.");
+  return image;
+}
+// Une nouvelle photo arrive en tête du diaporama.
+function addToGallery(image, alt, largeur, hauteur) {
+  const pos = db.prepare('SELECT COALESCE(MIN(pos), 1) - 1 AS n FROM gallery').get().n;
+  db.prepare('INSERT INTO gallery (image, alt, largeur, hauteur, pos) VALUES (?, ?, ?, ?, ?)').run(image, alt, largeur, hauteur, pos);
 }
 function allEpisodes() {
   const meta = Object.fromEntries(store.episodeMeta().map((m) => [m.id, m]));
@@ -349,12 +363,7 @@ route('DELETE', /^\/api\/admin\/panels\/(\d+)$/, true, ({ params }) => {
 
 route('GET', /^\/api\/admin\/gallery$/, true, () => ({ photos: store.allGallery() }));
 route('POST', /^\/api\/admin\/gallery$/, true, ({ body }) => {
-  const image = localImage(body.image);
-  if (!image) throw new HttpError(400, "L'image est obligatoire.");
-  const size = (v) => { const n = Math.round(Number(v)); return n > 0 && n <= 20000 ? n : 0; };
-  // Une nouvelle photo arrive en tête du diaporama.
-  const pos = db.prepare('SELECT COALESCE(MIN(pos), 1) - 1 AS n FROM gallery').get().n;
-  db.prepare('INSERT INTO gallery (image, alt, largeur, hauteur, pos) VALUES (?, ?, ?, ?, ?)').run(image, text(body.alt, 200, 'La description'), size(body.largeur), size(body.hauteur), pos);
+  addToGallery(requiredImage(body.image), text(body.alt, 200, 'La description'), photoSize(body.largeur), photoSize(body.hauteur));
   writeExport();
   return { ok: true };
 });
@@ -369,6 +378,51 @@ route('DELETE', /^\/api\/admin\/gallery\/(\d+)$/, true, ({ params }) => {
   const photo = db.prepare('SELECT image FROM gallery WHERE id = ?').get(Number(params[0]));
   db.prepare('DELETE FROM gallery WHERE id = ?').run(Number(params[0]));
   if (photo) removeUnusedUpload(photo.image);
+  writeExport();
+  return { ok: true };
+});
+
+// Photothèque de chaque épisode. Une photo peut aussi rejoindre le diaporama de l'accueil.
+route('GET', /^\/api\/admin\/photos$/, true, () => {
+  const shown = new Set(store.allGallery().map((g) => g.image));
+  return { photos: store.allEpisodePhotos().map((p) => ({ ...p, inGallery: shown.has(p.image) })) };
+});
+route('POST', /^\/api\/admin\/photos$/, true, ({ body }) => {
+  const episode = shortEpisode(body.episode);
+  if (!episode) throw new HttpError(400, "L'épisode est obligatoire.");
+  const pos = db.prepare('SELECT COALESCE(MAX(pos), -1) + 1 AS n FROM episode_photos').get().n;
+  db.prepare('INSERT INTO episode_photos (episode, image, alt, largeur, hauteur, pos) VALUES (?, ?, ?, ?, ?, ?)')
+    .run(episode, requiredImage(body.image), text(body.alt, 200, 'La description'), photoSize(body.largeur), photoSize(body.hauteur), pos);
+  writeExport();
+  return { ok: true };
+});
+route('PUT', /^\/api\/admin\/photos\/order$/, true, ({ body }) => { reorder('episode_photos', body.ids); writeExport(); return { ok: true }; });
+route('PUT', /^\/api\/admin\/photos\/(\d+)$/, true, ({ params, body }) => {
+  const photo = db.prepare('SELECT image FROM episode_photos WHERE id = ?').get(Number(params[0]));
+  if (!photo) throw new HttpError(404, 'Photo introuvable.');
+  const alt = text(body.alt, 200, 'La description');
+  db.prepare('UPDATE episode_photos SET alt = ? WHERE id = ?').run(alt, Number(params[0]));
+  db.prepare('UPDATE gallery SET alt = ? WHERE image = ?').run(alt, photo.image);
+  writeExport();
+  return { ok: true };
+});
+route('PUT', /^\/api\/admin\/photos\/(\d+)\/gallery$/, true, ({ params, body }) => {
+  const photo = db.prepare('SELECT * FROM episode_photos WHERE id = ?').get(Number(params[0]));
+  if (!photo) throw new HttpError(404, 'Photo introuvable.');
+  const present = db.prepare('SELECT id FROM gallery WHERE image = ?').get(photo.image);
+  if (body.on && !present) addToGallery(photo.image, photo.alt, photo.largeur, photo.hauteur);
+  if (!body.on) db.prepare('DELETE FROM gallery WHERE image = ?').run(photo.image);
+  writeExport();
+  return { ok: true };
+});
+route('DELETE', /^\/api\/admin\/photos\/(\d+)$/, true, ({ params }) => {
+  const photo = db.prepare('SELECT image FROM episode_photos WHERE id = ?').get(Number(params[0]));
+  db.prepare('DELETE FROM episode_photos WHERE id = ?').run(Number(params[0]));
+  if (photo) {
+    // Retirée de la photothèque, la photo quitte aussi le diaporama.
+    db.prepare('DELETE FROM gallery WHERE image = ?').run(photo.image);
+    removeUnusedUpload(photo.image);
+  }
   writeExport();
   return { ok: true };
 });

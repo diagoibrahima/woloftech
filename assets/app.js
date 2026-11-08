@@ -11,6 +11,7 @@
   var SERVICES = window.WT_SERVICES || [];
   var PANELS = window.WT_PANELS || [];
   var GALLERY = window.WT_GALLERY || [];
+  var EPISODE_PHOTOS = window.WT_EPISODE_PHOTOS || {};
   var RESEAUX = window.WT_RESEAUX || {};
   if (RESEAUX.podcast) { SITE.liens.linkedin = RESEAUX.podcast.linkedin; SITE.liens.tiktok = RESEAUX.podcast.tiktok; }
   if (RESEAUX.auteur) { SITE.animateur.linkedin = RESEAUX.auteur.linkedin; SITE.animateur.tiktok = RESEAUX.auteur.tiktok; }
@@ -796,17 +797,31 @@
   }
 
   /* ---------- Panels et invitations, hors du studio ---------- */
+  function panelCard(p) {
+    var where = [p.lieu, p.date].filter(Boolean).join(', ');
+    var inner = (p.image ? '<img src="' + esc(p.image) + '" alt="" loading="lazy" width="640" height="420">' : '') +
+      '<div class="panel-txt">' + (p.type ? '<span class="tag">' + esc(p.type) + '</span>' : '') + '<h3>' + esc(p.titre) + '</h3>' +
+      (where ? '<p class="soft">' + esc(where) + '</p>' : '') + (p.description ? '<p class="soft">' + esc(p.description) + '</p>' : '') + '</div>';
+    return p.lien ? '<a class="panel-card" href="' + esc(p.lien) + '" target="_blank" rel="noopener">' + inner + '</a>' : '<article class="panel-card">' + inner + '</article>';
+  }
+  // Sur l'accueil : les 10 plus récents en carrousel, et un lien vers la page qui les montre tous.
   function panelsHtml() {
     if (!PANELS.length) return '';
-    return '<section class="block"><div class="wrap"><div class="head-row"><div><h2>Panels et invitations</h2>' +
+    var arrow = function (d) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + d + '"/></svg>'; };
+    return '<section class="block" data-gallery aria-label="Panels et invitations"><div class="wrap"><div class="head-row"><div><h2>Panels et invitations</h2>' +
       '<p class="soft panels-lead">En dehors du podcast : les invitations, les panels animés et les événements où j\'ai pris le micro.</p></div>' +
-      '<a class="btn" href="services.html#panel">M\'inviter à animer</a></div><div class="panels">' + PANELS.map(function (p) {
-        var where = [p.lieu, p.date].filter(Boolean).join(', ');
-        var inner = (p.image ? '<img src="' + esc(p.image) + '" alt="" loading="lazy" width="640" height="420">' : '') +
-          '<div class="panel-txt">' + (p.type ? '<span class="tag">' + esc(p.type) + '</span>' : '') + '<h3>' + esc(p.titre) + '</h3>' +
-          (where ? '<p class="soft">' + esc(where) + '</p>' : '') + (p.description ? '<p class="soft">' + esc(p.description) + '</p>' : '') + '</div>';
-        return p.lien ? '<a class="panel-card" href="' + esc(p.lien) + '" target="_blank" rel="noopener">' + inner + '</a>' : '<article class="panel-card">' + inner + '</article>';
-      }).join('') + '</div></div></section>';
+      '<div class="arrows"><button class="arrow" type="button" data-prev aria-label="Panels précédents">' + arrow('M15 5l-7 7 7 7') + '</button>' +
+      '<button class="arrow" type="button" data-next aria-label="Panels suivants">' + arrow('M9 5l7 7-7 7') + '</button></div></div></div>' +
+      '<div class="track panel-track" tabindex="0" role="group" aria-label="Panels, faites défiler pour voir la suite">' + PANELS.slice(0, 10).map(panelCard).join('') + '</div>' +
+      '<div class="wrap btn-row panels-more"><a class="btn btn-main" href="panels.html">Voir tous les panels et invitations (' + PANELS.length + ')</a>' +
+      '<a class="btn" href="services.html#panel">Besoin de ma touche personnelle pour votre événement ?</a></div></section>';
+  }
+  function renderPanels() {
+    document.getElementById('main').innerHTML =
+      '<section class="page-hero with-photo"><img src="assets/photos/panels-hero.jpg" alt="" width="1600" height="1066" style="object-position:50% 45%"><div class="wrap"><h1>Panels et invitations</h1><p class="lead">En dehors du podcast : les invitations, les panels animés, les formations et les événements où j\'ai pris le micro.</p></div></section>' +
+      '<section class="block" style="padding-top:clamp(30px,4vw,56px)"><div class="wrap">' +
+      (PANELS.length ? '<div class="panels">' + PANELS.map(panelCard).join('') + '</div>' : '<p class="soft">Les premières invitations arrivent bientôt.</p>') +
+      '<div class="btn-row panels-more"><a class="btn btn-main" href="services.html#panel">Besoin de ma touche personnelle pour votre événement ?</a></div></div></section>';
   }
 
   /* ---------- Services ---------- */
@@ -973,7 +988,7 @@
   /* ---------- Gabarit commun ---------- */
   function renderChrome() {
     var page = document.body.dataset.page;
-    var links = [['episodes', 'episodes.html', 'Épisodes'], ['shorts', 'shorts.html', 'Shorts'], ['communaute', 'communaute.html', 'Communauté'], ['services', 'services.html', 'Services'], ['auteur', 'a-propos.html', "L'auteur"]];
+    var links = [['episodes', 'episodes.html', 'Épisodes'], ['shorts', 'shorts.html', 'Shorts'], ['communaute', 'communaute.html', 'Communauté'], ['services', 'services.html', 'Services'], ['auteur', 'a-propos.html', 'Host']];
     document.getElementById('head').innerHTML =
       '<a class="skip" href="#main">Aller au contenu</a>' +
       '<header class="site-head"><div class="wrap">' +
@@ -988,7 +1003,7 @@
       '<footer class="site-foot"><div class="wrap">' +
       '<img src="assets/logo.png" alt="" width="500" height="500" loading="lazy">' +
       '<div><ul class="foot-links">' +
-      '<li><a href="episodes.html">Épisodes</a></li><li><a href="shorts.html">Shorts</a></li><li><a href="communaute.html">Communauté</a></li><li><a href="services.html">Services</a></li><li><a href="a-propos.html">L\'auteur</a></li>' +
+      '<li><a href="episodes.html">Épisodes</a></li><li><a href="shorts.html">Shorts</a></li><li><a href="communaute.html">Communauté</a></li><li><a href="services.html">Services</a></li><li><a href="a-propos.html">Host</a></li>' +
       '<li><a href="' + L.whatsapp + '" target="_blank" rel="noopener">Chaîne WhatsApp</a></li>' +
       '<li><a href="' + L.soutenir + '" target="_blank" rel="noopener">Soutenir le podcast</a></li></ul>' +
       '<p>Wolof Tech, une production de la Maison du Podcast.</p></div>' +
@@ -1195,6 +1210,7 @@
     var idx = list.indexOf(e);
     var newer = list[idx - 1], older = list[idx + 1];
     var epShorts = shortsOf(e.id);
+    var epPhotos = EPISODE_PHOTOS[e.id] || [];
 
     main.innerHTML =
       '<div class="wrap"><div class="ep-title">' +
@@ -1208,7 +1224,7 @@
       (e.video ? '<a href="https://www.youtube.com/watch?v=' + esc(e.video) + '" target="_blank" rel="noopener">Ouvrir sur YouTube</a>' : '') + '</span></p>' +
       '<div class="main-player">' + playBtn(e) + waveHtml(e, 110) + '<span class="time" data-time="' + e.id + '"></span></div></div></div>' +
 
-      '<div class="wrap block ep-layout" style="padding-top:clamp(30px,4vw,52px)"><div class="ep-text" style="margin-top:0"><h2>À propos de cet épisode</h2>' + descriptionHtml(e.description) + '</div>' +
+      '<div class="wrap block ep-layout" style="padding-top:clamp(30px,4vw,52px)"><div class="ep-text" style="margin-top:0"><h2>À propos de cet épisode</h2>' + descriptionHtml(e.description) + photosHtml(epPhotos) + '</div>' +
 
       '<aside class="side">' +
       (epShorts.length ? '<section class="side-shorts"><h2>Shorts de l\'épisode</h2>' + shortsFeedHtml(false, epShorts) +
@@ -1223,6 +1239,7 @@
       '<section class="comments" id="commentaires" hidden></section>';
 
     initComments(e);
+    initPhotoViewer(epPhotos);
     var box = document.querySelector('.video');
     if (box) {
       box.querySelector('button').addEventListener('click', function () {
@@ -1238,6 +1255,64 @@
       });
     }
   }
+  /* ---------- Photothèque d'un épisode : mosaïque et visionneuse ---------- */
+  function photoAlt(p) { return p.alt || 'Photo de l\'enregistrement de l\'épisode'; }
+  function photosHtml(photos) {
+    if (!photos.length) return '';
+    return '<section class="ep-photos-sec"><h2>Photos de l\'enregistrement</h2><div class="ep-photos" data-n="' + Math.min(photos.length, 5) + '">' + photos.map(function (p, i) {
+      return '<button class="ep-photo" type="button" data-photo="' + i + '" aria-label="Agrandir la photo ' + (i + 1) + ' sur ' + photos.length + ' : ' + esc(photoAlt(p)) + '"><img src="' + esc(p.image) + '" alt=""' + (p.largeur && p.hauteur ? ' width="' + p.largeur + '" height="' + p.hauteur + '"' : '') + ' loading="lazy"></button>';
+    }).join('') + '</div></section>';
+  }
+  function initPhotoViewer(photos) {
+    if (!photos.length) return;
+    var arrow = function (d) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + d + '"/></svg>'; };
+    var dlg = document.createElement('dialog');
+    dlg.className = 'viewer';
+    dlg.setAttribute('aria-label', 'Photos de l\'enregistrement');
+    dlg.innerHTML = '<button class="viewer-shut" type="button" aria-label="Fermer">' + ICONS.close + '</button>' +
+      '<button class="viewer-nav prev" type="button" aria-label="Photo précédente">' + arrow('M15 5l-7 7 7 7') + '</button>' +
+      '<figure><img alt=""><figcaption aria-live="polite"></figcaption></figure>' +
+      '<button class="viewer-nav next" type="button" aria-label="Photo suivante">' + arrow('M9 5l7 7-7 7') + '</button>';
+    document.body.appendChild(dlg);
+    var img = dlg.querySelector('img'), caption = dlg.querySelector('figcaption'), at = 0;
+    dlg.classList.toggle('single', photos.length === 1);
+    function show(i) {
+      at = (i + photos.length) % photos.length;
+      var p = photos[at];
+      img.src = p.image;
+      img.alt = photoAlt(p);
+      caption.textContent = (photos.length > 1 ? (at + 1) + ' / ' + photos.length + (p.alt ? ' · ' : '') : '') + p.alt;
+      // La photo suivante est déjà prête quand on avance.
+      new Image().src = photos[(at + 1) % photos.length].image;
+    }
+    document.querySelector('.ep-photos').addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-photo]');
+      if (!b) return;
+      show(Number(b.dataset.photo));
+      dlg.showModal();
+    });
+    dlg.querySelector('.viewer-shut').addEventListener('click', function () { dlg.close(); });
+    dlg.querySelector('.prev').addEventListener('click', function () { show(at - 1); });
+    dlg.querySelector('.next').addEventListener('click', function () { show(at + 1); });
+    dlg.addEventListener('click', function (ev) {
+      if (ev.target === dlg || ev.target.tagName === 'FIGURE') dlg.close();
+    });
+    dlg.addEventListener('keydown', function (ev) {
+      if (ev.key === 'ArrowLeft') show(at - 1);
+      if (ev.key === 'ArrowRight') show(at + 1);
+    });
+    dlg.addEventListener('close', function () { img.removeAttribute('src'); });
+    // Sur téléphone, on glisse pour changer de photo.
+    var startX = null;
+    dlg.addEventListener('touchstart', function (ev) { startX = ev.touches.length === 1 ? ev.touches[0].clientX : null; }, { passive: true });
+    dlg.addEventListener('touchend', function (ev) {
+      if (startX === null) return;
+      var dx = ev.changedTouches[0].clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
+    });
+  }
+
   /* ---------- Commentaires : le formulaire n'apparaît que si le backend répond ---------- */
   function initComments(e) {
     var box = document.getElementById('commentaires');
@@ -1393,7 +1468,7 @@
 
   renderChrome();
   initHeader();
-  ({ accueil: renderHome, episodes: renderEpisodes, episode: renderEpisode, communaute: renderCommunaute, auteur: renderAuteur, shorts: renderShorts, services: renderServices })[document.body.dataset.page]();
+  ({ accueil: renderHome, episodes: renderEpisodes, episode: renderEpisode, communaute: renderCommunaute, auteur: renderAuteur, panels: renderPanels, shorts: renderShorts, services: renderServices })[document.body.dataset.page]();
   Player.init();
   initWatch();
   initGalleries();

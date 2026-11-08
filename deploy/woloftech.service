@@ -1,0 +1,25 @@
+[Unit]
+Description=Site et backend Wolof Tech
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=woloftech
+Group=woloftech
+WorkingDirectory=/opt/woloftech
+EnvironmentFile=/etc/woloftech.env
+ExecStart=/usr/local/bin/node backend/server.js
+Restart=always
+RestartSec=3
+
+# Le service ne peut écrire que dans ses trois dossiers de données.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/woloftech/backend/data /opt/woloftech/assets/uploads /opt/woloftech/data
+
+[Install]
+WantedBy=multi-user.target

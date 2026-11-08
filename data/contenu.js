@@ -1247,6 +1247,51 @@ window.WT_SHORTS = [
   "video": "Qa3STj4W7pU",
   "titre": "",
   "episode": "S15E5"
+ },
+ {
+  "video": "-yQw4mVgn1s",
+  "titre": "",
+  "episode": "S15E4"
+ },
+ {
+  "video": "42jHyKKZFtg",
+  "titre": "",
+  "episode": "S15E3"
+ },
+ {
+  "video": "lzEIdHn0VXg",
+  "titre": "",
+  "episode": "S15E2"
+ },
+ {
+  "video": "WPIWo8CTpcM",
+  "titre": "",
+  "episode": "S15E2"
+ },
+ {
+  "video": "0IyWnIWnSXc",
+  "titre": "",
+  "episode": "S15E2"
+ },
+ {
+  "video": "GAabhri4rNI",
+  "titre": "",
+  "episode": "S15E2"
+ },
+ {
+  "video": "LsoAwT7jN24",
+  "titre": "",
+  "episode": "S15E1"
+ },
+ {
+  "video": "X3pUyac4cnQ",
+  "titre": "",
+  "episode": "S15E1"
+ },
+ {
+  "video": "Awb6fHSgDOY",
+  "titre": "",
+  "episode": "S15E1"
  }
 ];
 window.WT_PANELS = [
@@ -1260,9 +1305,9 @@ window.WT_PANELS = [
   "lien": ""
  },
  {
-  "titre": "Échange entre intervenants",
+  "titre": "Oxo Festival",
   "type": "Panel",
-  "lieu": "",
+  "lieu": "Benin",
   "date": "",
   "description": "",
   "image": "assets/photos/panel.jpg",
@@ -1276,9 +1321,135 @@ window.WT_PANELS = [
   "description": "",
   "image": "assets/photos/direct.jpg",
   "lien": ""
+ },
+ {
+  "titre": "Materclass pocast avec CJS",
+  "type": "Formation",
+  "lieu": "",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/cb6a2697868bc2c2511552d5.jpg",
+  "lien": ""
+ },
+ {
+  "titre": "Jeunesse Active",
+  "type": "Invitation",
+  "lieu": "West Africa Democracy Radio",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/21edb9a0105d85a77206b7dc.jpg",
+  "lien": ""
+ },
+ {
+  "titre": "Unlock leadership now",
+  "type": "Invitation",
+  "lieu": "DUNIS",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/a7fcc7803e40c4e8f81ce992.jpg",
+  "lien": ""
+ },
+ {
+  "titre": "Podcast Live - Aka Talks",
+  "type": "Événement",
+  "lieu": "Aka Talks 2026",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/2f2fc7fa3658d6a26bbfacc0.jpg",
+  "lien": ""
+ },
+ {
+  "titre": "Nuit du Hack 2025",
+  "type": "Animation de panel",
+  "lieu": "ODC",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/50f143735b1176c411fb4be7.jpg",
+  "lien": ""
+ },
+ {
+  "titre": "Podcast live Aka Talks",
+  "type": "Animation de panel",
+  "lieu": "Aka Talks",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/4f887969f05c9c1315ccf082.jpg",
+  "lien": ""
+ },
+ {
+  "titre": "Podcast Live Agile tour",
+  "type": "Animation de panel",
+  "lieu": "Agile tour 2025",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/c50809ae74edeeb8dd060dd1.png",
+  "lien": ""
+ },
+ {
+  "titre": "Oxo Festival",
+  "type": "Conférence",
+  "lieu": "Benin",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/5e618d4baf1130363a910079.jpg",
+  "lien": ""
+ },
+ {
+  "titre": "JCPD Edition 1",
+  "type": "",
+  "lieu": "Fleur de Lys",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/f1619e22d5f7135e636f5fc9.jpg",
+  "lien": ""
+ },
+ {
+  "titre": "African languages Technologies and Tools",
+  "type": "Invitation",
+  "lieu": "Live",
+  "date": "",
+  "description": "",
+  "image": "assets/uploads/7e774589deeaece072c87976.webp",
+  "lien": ""
  }
 ];
 window.WT_GALLERY = [
+ {
+  "image": "assets/uploads/668b0eb508175dafddc7f7be.jpg",
+  "alt": "",
+  "largeur": 1080,
+  "hauteur": 720
+ },
+ {
+  "image": "assets/uploads/b82206a5085d5b44a7691e94.jpg",
+  "alt": "",
+  "largeur": 1080,
+  "hauteur": 720
+ },
+ {
+  "image": "assets/uploads/9e7bc82fd6a6d81d5f56e278.jpg",
+  "alt": "",
+  "largeur": 1068,
+  "hauteur": 1600
+ },
+ {
+  "image": "assets/uploads/855c459f2f4c3acb15e3545e.jpg",
+  "alt": "",
+  "largeur": 1068,
+  "hauteur": 1600
+ },
+ {
+  "image": "assets/uploads/f4b2a94d0513bf01341e0ac6.jpg",
+  "alt": "",
+  "largeur": 900,
+  "hauteur": 601
+ },
+ {
+  "image": "assets/uploads/c79813cfbbccb9c7d64b94f9.jpg",
+  "alt": "",
+  "largeur": 601,
+  "hauteur": 900
+ },
  {
   "image": "assets/photos/conversation.jpg",
   "alt": "Un invité et une invitée échangent autour de la table du studio",
@@ -1376,6 +1547,266 @@ window.WT_GALLERY = [
   "hauteur": 733
  }
 ];
+window.WT_EPISODE_PHOTOS = {
+ "S15E6": [
+  {
+   "image": "assets/uploads/5d69b8ed5dd97d02ae831c25.jpg",
+   "alt": "",
+   "largeur": 601,
+   "hauteur": 900
+  },
+  {
+   "image": "assets/uploads/4aa82670f1f91a0aca4bfc03.jpg",
+   "alt": "",
+   "largeur": 601,
+   "hauteur": 900
+  },
+  {
+   "image": "assets/uploads/c79813cfbbccb9c7d64b94f9.jpg",
+   "alt": "",
+   "largeur": 601,
+   "hauteur": 900
+  },
+  {
+   "image": "assets/uploads/f7d676786f341afb92fbf8a1.jpg",
+   "alt": "",
+   "largeur": 601,
+   "hauteur": 900
+  },
+  {
+   "image": "assets/uploads/f4b2a94d0513bf01341e0ac6.jpg",
+   "alt": "",
+   "largeur": 900,
+   "hauteur": 601
+  },
+  {
+   "image": "assets/uploads/34d52137de289fae808646fe.jpg",
+   "alt": "",
+   "largeur": 601,
+   "hauteur": 900
+  },
+  {
+   "image": "assets/uploads/53d47de326c2c3016fe1d661.jpg",
+   "alt": "",
+   "largeur": 601,
+   "hauteur": 900
+  }
+ ],
+ "S15E5": [
+  {
+   "image": "assets/uploads/2c57afdedeed3f7b3f386310.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1068
+  },
+  {
+   "image": "assets/uploads/6fe4d078343db53ed2adc548.jpg",
+   "alt": "",
+   "largeur": 1068,
+   "hauteur": 1600
+  },
+  {
+   "image": "assets/uploads/a508860764b25d3d314f2da7.jpg",
+   "alt": "",
+   "largeur": 1068,
+   "hauteur": 1600
+  },
+  {
+   "image": "assets/uploads/855c459f2f4c3acb15e3545e.jpg",
+   "alt": "",
+   "largeur": 1068,
+   "hauteur": 1600
+  },
+  {
+   "image": "assets/uploads/aa2ac8850e5add06d2cee8c0.jpg",
+   "alt": "",
+   "largeur": 1068,
+   "hauteur": 1600
+  },
+  {
+   "image": "assets/uploads/3be73cfce1162fb2711a3331.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1068
+  },
+  {
+   "image": "assets/uploads/9e7bc82fd6a6d81d5f56e278.jpg",
+   "alt": "",
+   "largeur": 1068,
+   "hauteur": 1600
+  },
+  {
+   "image": "assets/uploads/cdea1f7ea86d60296712cd50.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1068
+  },
+  {
+   "image": "assets/uploads/0ae961764733aa738908d766.jpg",
+   "alt": "",
+   "largeur": 1068,
+   "hauteur": 1600
+  }
+ ],
+ "S15E4": [
+  {
+   "image": "assets/uploads/cc3809cf83a417438f1662b0.jpg",
+   "alt": "",
+   "largeur": 1080,
+   "hauteur": 720
+  },
+  {
+   "image": "assets/uploads/b82206a5085d5b44a7691e94.jpg",
+   "alt": "",
+   "largeur": 1080,
+   "hauteur": 720
+  },
+  {
+   "image": "assets/uploads/5c2844b9b0ce832e281a60e6.jpg",
+   "alt": "",
+   "largeur": 720,
+   "hauteur": 1080
+  },
+  {
+   "image": "assets/uploads/12e10e1e5828eea2d5d2878e.jpg",
+   "alt": "",
+   "largeur": 720,
+   "hauteur": 1080
+  },
+  {
+   "image": "assets/uploads/668b0eb508175dafddc7f7be.jpg",
+   "alt": "",
+   "largeur": 1080,
+   "hauteur": 720
+  }
+ ],
+ "S15E3": [
+  {
+   "image": "assets/uploads/f8984d3037a313b0f977f03e.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1067
+  },
+  {
+   "image": "assets/uploads/7268baf247a4216c2392abb2.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1067
+  },
+  {
+   "image": "assets/uploads/e33964ee7dccad72ed6c1dd1.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1067
+  },
+  {
+   "image": "assets/uploads/962698be831ff4b93240661e.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1067
+  },
+  {
+   "image": "assets/uploads/056eecc96722cb5f7bc102eb.jpg",
+   "alt": "",
+   "largeur": 1067,
+   "hauteur": 1600
+  },
+  {
+   "image": "assets/uploads/ab14ad1ba95614bb63587e91.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1067
+  }
+ ],
+ "S15E2": [
+  {
+   "image": "assets/uploads/5553e76389a8752979a41ba9.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 900
+  },
+  {
+   "image": "assets/uploads/4967fcd5d1c18ee899d34289.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1067
+  },
+  {
+   "image": "assets/uploads/47bf0faf9fd36daf8fbe3813.jpg",
+   "alt": "",
+   "largeur": 1067,
+   "hauteur": 1600
+  },
+  {
+   "image": "assets/uploads/4cee1d9069417ade7dd81b83.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1067
+  },
+  {
+   "image": "assets/uploads/eee70e9dee4d86b2e92c7437.jpg",
+   "alt": "",
+   "largeur": 1600,
+   "hauteur": 1067
+  }
+ ],
+ "S15E1": [
+  {
+   "image": "assets/uploads/33d8e488396e8dcfc6bb328e.jpg",
+   "alt": "",
+   "largeur": 1280,
+   "hauteur": 853
+  },
+  {
+   "image": "assets/uploads/d34be48cf8be4f70bd0af35a.jpg",
+   "alt": "",
+   "largeur": 853,
+   "hauteur": 1280
+  },
+  {
+   "image": "assets/uploads/14762b259f317187a95b3dbd.jpg",
+   "alt": "",
+   "largeur": 853,
+   "hauteur": 1280
+  },
+  {
+   "image": "assets/uploads/a31bba77bf9dc571bbe849c1.jpg",
+   "alt": "",
+   "largeur": 1280,
+   "hauteur": 853
+  },
+  {
+   "image": "assets/uploads/8c18dce5c08b58275977f002.jpg",
+   "alt": "",
+   "largeur": 853,
+   "hauteur": 1280
+  },
+  {
+   "image": "assets/uploads/3413c5ff1afef9d0db7a6337.jpg",
+   "alt": "",
+   "largeur": 853,
+   "hauteur": 1280
+  },
+  {
+   "image": "assets/uploads/9973b4d0ccf3511a968331bb.jpg",
+   "alt": "",
+   "largeur": 1280,
+   "hauteur": 853
+  },
+  {
+   "image": "assets/uploads/09a38fd15e7902b81e690180.jpg",
+   "alt": "",
+   "largeur": 854,
+   "hauteur": 1280
+  },
+  {
+   "image": "assets/uploads/e52ad07995be8b73bb75e0ee.jpg",
+   "alt": "",
+   "largeur": 1280,
+   "hauteur": 853
+  }
+ ]
+};
 window.WT_RESEAUX = {
  "podcast": {
   "linkedin": "https://www.linkedin.com/in/el-hadji-ibrahima-diago-11729466/",
@@ -1439,6 +1870,22 @@ window.WT_EPISODE_META = {
  "S15E5": {
   "sponsors": [],
   "video": "gqPMKZO8atk"
+ },
+ "S15E4": {
+  "sponsors": [],
+  "video": "2rhhQe_N4-0"
+ },
+ "S15E3": {
+  "sponsors": [],
+  "video": "Z910uVW_W7o"
+ },
+ "S15E2": {
+  "sponsors": [],
+  "video": "px_Gp03rikw"
+ },
+ "S15E1": {
+  "sponsors": [],
+  "video": "v7XQ5UYQgr0"
  }
 };
 window.WT_EPISODES_EXTRA = [];

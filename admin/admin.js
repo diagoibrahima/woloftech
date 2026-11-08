@@ -76,6 +76,28 @@
     });
   }
 
+  // Envoi une par une : une photo refusée n'empêche pas les suivantes.
+  function uploadPhotos(input, save, done) {
+    var files = Array.prototype.slice.call(input.files), added = 0, failure = null;
+    if (!files.length) return;
+    input.disabled = true;
+    files.reduce(function (chain, file) {
+      return chain.then(function () {
+        return prepareImage(file).then(function (p) {
+          return api('POST', 'upload', undefined, p.blob).then(function (r) {
+            return save({ image: r.path, largeur: p.w, hauteur: p.h });
+          });
+        }).then(function () { added++; }).catch(function (err) { failure = err; });
+      });
+    }, Promise.resolve()).then(function () {
+      input.disabled = false;
+      input.value = '';
+      if (failure) fail(failure);
+      else toast(added + ' photo(s) ajoutée(s).');
+      done();
+    });
+  }
+
   /* ---------- Connexion ---------- */
   function renderLogin() {
     app.innerHTML = '<main><form class="card login"><img src="../assets/logo.png" alt=""><h2>Administration Wolof Tech</h2>' +
@@ -171,6 +193,8 @@
       '<div class="card"><h3>Shorts de l\'épisode</h3><p class="note" style="margin-bottom:10px">Autant que vous voulez : sur le site, on glisse vers le haut pour passer au suivant. Chaque ajout est enregistré tout de suite.</p><div id="ep-shorts"></div>' +
       '<label for="ep-links" style="margin-top:10px">Liens YouTube Shorts, un par ligne</label><textarea id="ep-links" rows="3" placeholder="https://youtube.com/shorts/..."></textarea>' +
       '<button class="btn small" type="button" id="add-shorts" style="margin-top:8px">Ajouter les shorts</button></div>' +
+      '<div class="card"><h3>Photothèque de l\'épisode</h3><p class="note" style="margin-bottom:10px">Les photos de l\'enregistrement, en mosaïque sur la page de l\'épisode. Cochez « Diaporama » pour en montrer une aussi dans « Dans le studio et sur le terrain » sur l\'accueil. Chaque changement est enregistré tout de suite.</p>' +
+      '<label for="ep-photo-files">Ajouter des photos (JPEG, PNG ou WebP, plusieurs à la fois si besoin)</label><input id="ep-photo-files" type="file" multiple accept="image/jpeg,image/png,image/webp"><div id="ep-photos" style="margin-top:10px"></div></div>' +
       '<div class="card">' + field('Vidéo YouTube (lien ou identifiant)', 'video', ep.video, 'text') + (ep.pending && ep.video ? '<p class="note">Vidéo proposée d\'après le titre : à vérifier. <a href="https://www.youtube.com/watch?v=' + esc(ep.video) + '" target="_blank" rel="noopener">Ouvrir</a></p>' : '') + '</div>' +
       '<div class="row"><button class="btn main" type="button" id="save-done">Enregistrer' + (ep.pending ? ' et marquer complet' : '') + '</button>' + (ep.pending ? '<button class="btn" type="button" id="save-later">Enregistrer, à finir plus tard</button>' : '') + '</div>';
 
@@ -197,6 +221,36 @@
         }).join('') || '<p class="note">Aucun short pour cet épisode.</p>';
       }).catch(fail);
     }
+    var epPhotos = [];
+    function drawPhotos() {
+      return api('GET', 'photos').then(function (res) {
+        epPhotos = res.photos.filter(function (p) { return p.episode === ep.id; });
+        var box = view.querySelector('#ep-photos');
+        if (box) box.innerHTML = epPhotos.map(function (p, i) {
+          return '<div class="item"><img class="thumb" src="../' + esc(p.image) + '" alt="" loading="lazy"><div><label for="ph-alt-' + p.id + '">Description de la photo</label><input id="ph-alt-' + p.id + '" type="text" maxlength="200" data-alt="' + p.id + '" value="' + esc(p.alt) + '">' +
+            '<label class="tick"><input type="checkbox" data-show="' + p.id + '"' + (p.inGallery ? ' checked' : '') + '> Diaporama de l\'accueil</label></div>' +
+            '<div class="row">' + moveButtons(i, epPhotos.length) + '<button class="btn small danger" type="button" data-photo-del="' + p.id + '">Retirer</button></div></div>';
+        }).join('') || '<p class="note">Aucune photo pour cet épisode.</p>';
+      }).catch(fail);
+    }
+    view.querySelector('#ep-photo-files').addEventListener('change', function (ev) {
+      uploadPhotos(ev.target, function (photo) {
+        photo.episode = ep.id;
+        return api('POST', 'photos', photo);
+      }, drawPhotos);
+    });
+    view.querySelector('#ep-photos').addEventListener('change', function (ev) {
+      var t = ev.target;
+      if (t.dataset.alt) api('PUT', 'photos/' + t.dataset.alt, { alt: t.value }).then(function () { toast('Description enregistrée.'); }).catch(fail);
+      if (t.dataset.show) api('PUT', 'photos/' + t.dataset.show + '/gallery', { on: t.checked }).then(function () { toast(t.checked ? 'Photo ajoutée au diaporama.' : 'Photo retirée du diaporama.'); }).catch(fail);
+    });
+    view.querySelector('#ep-photos').addEventListener('click', function (ev) {
+      var b = ev.target.closest('button');
+      if (!b) return;
+      if (b.dataset.move) api('PUT', 'photos/order', { ids: moved(epPhotos, Number(b.dataset.i), Number(b.dataset.move)) }).then(drawPhotos).catch(fail);
+      if (b.dataset.photoDel && confirm('Retirer cette photo de l\'épisode et du diaporama ?')) api('DELETE', 'photos/' + b.dataset.photoDel).then(drawPhotos).catch(fail);
+    });
+    drawPhotos();
     view.querySelector('#ep-shorts').addEventListener('click', function (ev) {
       var b = ev.target.closest('button');
       if (!b) return;
@@ -411,31 +465,25 @@
 
   /* ---------- Photos du studio ---------- */
   function viewGallery(view) {
-    api('GET', 'gallery').then(function (res) {
-      var photos = res.photos;
+    Promise.all([api('GET', 'gallery'), api('GET', 'photos')]).then(function (res) {
+      var photos = res[0].photos, library = res[1].photos;
       view.innerHTML = '<div class="head"><div><h2>Dans le studio et sur le terrain</h2><p class="note">' + photos.length + ' photo(s) dans le diaporama de l\'accueil. Une nouvelle photo arrive en premier.</p></div></div>' +
-        '<div class="card"><label for="files">Ajouter des photos (JPEG, PNG ou WebP, plusieurs à la fois si besoin)</label><input id="files" type="file" multiple accept="image/jpeg,image/png,image/webp"></div>' +
+        '<div class="card"><h3>Choisir dans les photothèques des épisodes</h3>' + (library.length
+          ? '<p class="note" style="margin-bottom:10px">Cochez les photos à montrer dans le diaporama.</p><div class="pick">' + library.map(function (p) {
+              return '<label><input type="checkbox" data-show="' + p.id + '"' + (p.inGallery ? ' checked' : '') + '><img src="../' + esc(p.image) + '" alt="" loading="lazy"><span>' + esc(p.episode) + '</span></label>';
+            }).join('') + '</div>'
+          : '<p class="note">Aucune photo pour le moment. Ajoutez-en depuis la fiche d\'un épisode, dans l\'onglet Épisodes.</p>') + '</div>' +
+        '<div class="card"><label for="files">Ajouter d\'autres photos, sans lien avec un épisode (JPEG, PNG ou WebP, plusieurs à la fois si besoin)</label><input id="files" type="file" multiple accept="image/jpeg,image/png,image/webp"></div>' +
         '<div class="card list">' + (photos.map(function (p, i) {
           return '<div class="item"><img class="thumb" src="../' + esc(p.image) + '" alt="" loading="lazy"><div><label for="alt-' + p.id + '">Description de la photo</label><input id="alt-' + p.id + '" type="text" maxlength="200" data-alt="' + p.id + '" value="' + esc(p.alt) + '"></div>' +
             '<div class="row">' + moveButtons(i, photos.length) + '<button class="btn small danger" type="button" data-del="' + p.id + '">Retirer</button></div></div>';
         }).join('') || '<p class="empty">Aucune photo : la section n\'apparaît pas sur le site.</p>') + '</div>';
       view.querySelector('#files').addEventListener('change', function (ev) {
-        var files = Array.prototype.slice.call(ev.target.files), added = 0, failure = null;
-        ev.target.disabled = true;
-        // Envoi une par une : une photo refusée n'empêche pas les suivantes.
-        files.reduce(function (chain, file) {
-          return chain.then(function () {
-            return prepareImage(file).then(function (p) {
-              return api('POST', 'upload', undefined, p.blob).then(function (r) {
-                return api('POST', 'gallery', { image: r.path, largeur: p.w, hauteur: p.h });
-              });
-            }).then(function () { added++; }).catch(function (err) { failure = err; });
-          });
-        }, Promise.resolve()).then(function () {
-          if (failure) fail(failure);
-          else toast(added + ' photo(s) ajoutée(s).');
-          viewGallery(view);
-        });
+        uploadPhotos(ev.target, function (photo) { return api('POST', 'gallery', photo); }, function () { viewGallery(view); });
+      });
+      var pick = view.querySelector('.pick');
+      if (pick) pick.addEventListener('change', function (ev) {
+        if (ev.target.dataset.show) api('PUT', 'photos/' + ev.target.dataset.show + '/gallery', { on: ev.target.checked }).then(function () { viewGallery(view); }).catch(fail);
       });
       var list = view.querySelector('.list');
       list.addEventListener('change', function (ev) {

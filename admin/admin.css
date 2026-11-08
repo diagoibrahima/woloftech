@@ -73,3 +73,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--ink); outline: n
   .item > .row { grid-column: 1 / -1; }
   .sponsor-line { grid-template-columns: minmax(0, 1fr); padding-bottom: 8px; border-bottom: 1px solid var(--line); }
 }
+
+/* Photothèques */
+.tick { display: flex; align-items: center; gap: 7px; margin-top: 8px; font-weight: 500; cursor: pointer; }
+.tick input { width: auto; }
+.pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+.pick label { position: relative; display: block; margin: 0; cursor: pointer; }
+.pick img { display: block; width: 100%; aspect-ratio: 1; border: 3px solid transparent; border-radius: 10px; object-fit: cover; }
+.pick input { position: absolute; top: 7px; left: 7px; width: 20px; height: 20px; margin: 0; }
+.pick input:checked ~ img { border-color: #00803c; }
+.pick input:focus-visible ~ img { outline: 2px solid #0b0b0b; outline-offset: 2px; }
+.pick span { display: block; margin-top: 3px; color: var(--soft); font-size: 0.82rem; font-weight: 500; }
