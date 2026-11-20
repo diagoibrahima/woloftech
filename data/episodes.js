@@ -1,6 +1,22 @@
 // Fichier genere par tools/update-episodes.ps1 - ne pas modifier a la main.
 window.WT_EPISODES = [
     {
+        "id":  "S15E7",
+        "season":  15,
+        "episode":  7,
+        "part":  0,
+        "kind":  "episode",
+        "title":  "L’infrastructure publique numérique, la sécurité et l’IA pour répondre aux défis du développement au Sénégal | Dr Assane Gueye",
+        "date":  "2026-11-20",
+        "duration":  "00:47:42",
+        "summary":  "Faire la queue des heures pour un extrait de naissance, envoyer de l\u0027argent par Mobile Money en un clic ou accéder à son dossier médical à distance : derrière ces…",
+        "description":  "Faire la queue des heures pour un extrait de naissance, envoyer de l\u0027argent par Mobile Money en un clic ou accéder à son dossier médical à distance : derrière ces services vitaux se cache une véritable « tuyauterie invisible », l\u0027Infrastructure Publique Numérique (IPN).\nDans cet épisode de Wolof Tech, nous recevons le Dr Assane Gueye (Senior program Officer à la Fondation Gates et ancien co-dirigeant de CyLab-Africa) pour expliquer en wolof comment développer ces infrastructures tout en garantissant la cybersécurité, la protection des données et la souveraineté des citoyens.",
+        "audio":  "https://anchor.fm/s/2d912044/podcast/play/129785282/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-10-20%2F5837d509-76cb-abd5-e528-0e892ea118b0.mp3",
+        "spotify":  "https://creators.spotify.com/pod/show/woloftech/episodes/Linfrastructure-publique-numrique--la-scurit-et-lIA-pour-rpondre-aux-dfis-du-dveloppement-au-Sngal--Dr-Assane-Gueye-e3sn802",
+        "video":  "",
+        "image":  "assets/episodes/s15e7.jpg"
+    },
+    {
         "id":  "S15E6",
         "season":  15,
         "episode":  6,
